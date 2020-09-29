@@ -54,5 +54,5 @@ def mark_brightest_spots(image_src):
         os.mkdir('/home/pi/Pictures/Canon_700D/Brightest')
     cv2.imwrite('/home/pi/Pictures/Canon_700D/Brightest/' + os.path.basename(image_src), image)
     cv2.waitKey(0)
-
+    return '/home/pi/Pictures/Canon_700D/Brightest/' + os.path.basename(image_src)
 

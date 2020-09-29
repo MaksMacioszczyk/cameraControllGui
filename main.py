@@ -3,6 +3,7 @@ from datetime import datetime
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtUiTools import *
+from PySide2.QtGui import *
 import PySide2 as ps
 from PySide2 import *
 import sys, multiprocessing
@@ -15,13 +16,13 @@ NUMBER_SECONDS_TO_WAIT = 1
 class WindowApp:
     #QT INIT
     app = QApplication([])
-    ui_file = QFile("/home/pi/Desktop/GUI/Project_TEST/form_main.ui")
+    ui_file = QFile("/home/pi/Desktop/cameraControllGui/form_main.ui")
     ui_file.open(QFile.ReadOnly)
     loader = QUiLoader()
     window = loader.load(ui_file)
     button = window.Button_1
     label = window.Label_1
-
+    image_label = window.Label_image
 
 
     def button_click(self):
@@ -34,7 +35,9 @@ class WindowApp:
             self.app.processEvents()
         self.button.setEnabled(True)
         image_src = cameraControll.capture_image()
-        brightestSpot.mark_brightest_spots(image_src)
+        image_marked = brightestSpot.mark_brightest_spots(image_src)
+        new_pixmap = QPixmap(image_marked)
+        self.image_label.setPixmap(new_pixmap)
 
 
     def __init__(self):

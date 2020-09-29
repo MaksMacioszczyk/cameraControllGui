@@ -62,8 +62,8 @@
    <widget class="QPushButton" name="Button_1">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>340</y>
+      <x>10</x>
+      <y>360</y>
       <width>191</width>
       <height>101</height>
      </rect>
@@ -76,14 +76,14 @@
 font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
     </property>
     <property name="text">
-     <string>Push the button!!!</string>
+     <string>Take a picture!</string>
     </property>
    </widget>
    <widget class="QLabel" name="Label_1">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>220</y>
+      <x>30</x>
+      <y>240</y>
       <width>151</width>
       <height>81</height>
      </rect>
@@ -101,6 +101,25 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Label_image">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>60</y>
+      <width>501</width>
+      <height>361</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../../Pictures/Canon_700D/PIC_29-09-20--09:56:39.jpg</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
