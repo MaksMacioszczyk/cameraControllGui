@@ -6,6 +6,8 @@ from PySide2.QtUiTools import *
 import PySide2 as ps
 from PySide2 import *
 import sys, multiprocessing
+import brightestSpot
+
 
 NUMBER_SECONDS_TO_WAIT = 1
 
@@ -22,7 +24,7 @@ class WindowApp:
 
 
 
-    def change_label_text(self):
+    def button_click(self):
         start_time = time.time()
         while ((time.time() - start_time) <= NUMBER_SECONDS_TO_WAIT):
             time.sleep(0.3)
@@ -31,12 +33,13 @@ class WindowApp:
             self.label.setText(str(round(NUMBER_SECONDS_TO_WAIT - (time.time() - start_time))))
             self.app.processEvents()
         self.button.setEnabled(True)
-        cameraControll.capture_image()
+        image_src = cameraControll.capture_image()
+        brightestSpot.mark_brightest_spots(image_src)
 
 
     def __init__(self):
 
-        self.button.clicked.connect(self.change_label_text)
+        self.button.clicked.connect(self.button_click)
         self.window.setWindowFlags(Qt.Window | Qt.FramelessWindowHint)
 
 

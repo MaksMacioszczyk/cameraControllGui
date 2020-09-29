@@ -23,3 +23,4 @@ def capture_image():
     shutil.move(target, '/home/pi/Pictures/Canon_700D')
     os.rename('/home/pi/Pictures/Canon_700D/' + file_path.name, '/home/pi/Pictures/Canon_700D/' + data_str)
     camera.exit()
+    return '/home/pi/Pictures/Canon_700D/' + data_str
