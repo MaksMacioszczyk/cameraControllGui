@@ -1,31 +1,53 @@
-# import the necessary packages
 from imutils import contours
+import statistics
 from skimage import measure
 import numpy as np
-import argparse
 import imutils
 import cv2, os
 
+import matplotlib.pyplot as plt
 
 
 def mark_brightest_spots(image_src):
     image = image_src
+
     image = cv2.imread(image)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    blurred = cv2.GaussianBlur(gray, (11, 11), 0)
+    blurred = cv2.blur(gray,(30,30))
 
     thresh = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)[1]
 
     thresh = cv2.erode(thresh, None, iterations=2)
     thresh = cv2.dilate(thresh, None, iterations=4)
 
+    #plt.imshow(thresh, cmap=plt.cm.gray)
+    #plt.show()
+
     labels = measure.label(thresh, neighbors=8, background=0)
     mask = np.zeros(thresh.shape, dtype="uint8")
     # loop over the unique components
+    pixels_tab = list()
     for label in np.unique(labels):
+
+        if label == 0:
+
+            continue
+
+        labelMask = np.zeros(thresh.shape, dtype="uint8")
+        labelMask[labels == label] = 255
+        numPixels = cv2.countNonZero(labelMask)
+
+        if numPixels > 200:
+           pixels_tab.append(numPixels)
+    mean_pixels_num = statistics.mean(pixels_tab) * 0.2
+    i = 0
+    for label in np.unique(labels):
+
         # if this is the background label, ignore it
         if label == 0:
+            i = i + 1
             continue
+
         # otherwise, construct the label mask and count the
         # number of pixels
         labelMask = np.zeros(thresh.shape, dtype="uint8")
@@ -33,26 +55,45 @@ def mark_brightest_spots(image_src):
         numPixels = cv2.countNonZero(labelMask)
         # if the number of pixels in the component is sufficiently
         # large, then add it to our mask of "large blobs"
-        if numPixels > 300:
+        if numPixels >= mean_pixels_num:
             mask = cv2.add(mask, labelMask)
+            mean = cv2.mean(image, labelMask)
+            R = mean[2]
+            G = mean[1]
+            B = mean[0]
+            brightness = (0.2126 * R + 0.7152 * G + 0.0722 * B)
+            print(
+                f"{i} => {(round(R, 1))}, {round(G, 1)}, {round(B, 1)} Luminance => {round(brightness, 1)}, number of pixels: {numPixels}")
 
-    cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
-        cv2.CHAIN_APPROX_SIMPLE)
-    cnts = imutils.grab_contours(cnts)
-    cnts = contours.sort_contours(cnts)[0]
+            cnts = cv2.findContours(labelMask.copy(), cv2.RETR_EXTERNAL,
+                            cv2.CHAIN_APPROX_SIMPLE)
+            cnts = imutils.grab_contours(cnts)
+            for (k, c) in enumerate(cnts):
+                # draw the bright spot on the image
+                (x, y, w, h) = cv2.boundingRect(c)
+                ((cX, cY), radius) = cv2.minEnclosingCircle(c)
+                cont = cv2.circle(image, (int(cX), int(cY)), 150,
+                                  (0, 0, 255), 3)
+                cv2.putText(image, "#{}".format(i), (x, y - 15),
+                            cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 4)
+            i += 1
+    # cnts = contours.sort_contours(cnts)[0]
     # loop over the contours
-    for (i, c) in enumerate(cnts):
-        # draw the bright spot on the image
-        (x, y, w, h) = cv2.boundingRect(c)
-        ((cX, cY), radius) = cv2.minEnclosingCircle(c)
-        cv2.circle(image, (int(cX), int(cY)), int(radius),
-            (0, 0, 255), 3)
-        cv2.putText(image, "#{}".format(i + 1), (x, y - 15),
-            cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
-    # show the output image
+
+    # for (i, c) in enumerate(cnts):
+    #     # draw the bright spot on the image
+    #     (x, y, w, h) = cv2.boundingRect(c)
+    #     ((cX, cY), radius) = cv2.minEnclosingCircle(c)
+    #     cont = cv2.circle(image, (int(cX), int(cY)), 150,
+    #                       (0, 0, 255), 3)
+    #     cv2.putText(image, "#{}".format(i + 1), (x, y - 15),
+    #                 cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 4)
+
     if not os.path.exists('/home/pi/Pictures/Canon_700D/Brightest'):
         os.mkdir('/home/pi/Pictures/Canon_700D/Brightest')
     cv2.imwrite('/home/pi/Pictures/Canon_700D/Brightest/' + os.path.basename(image_src), image)
     cv2.waitKey(0)
     return '/home/pi/Pictures/Canon_700D/Brightest/' + os.path.basename(image_src)
 
+
+#mark_brightest_spots('/home/pi/Pictures/Canon_700D/PIC_29-09-20--14:35:08.jpg')

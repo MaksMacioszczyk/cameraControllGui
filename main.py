@@ -1,13 +1,9 @@
-import time, gphoto2 as gp, os, subprocess, logging, cameraControll
-from datetime import datetime
+import time, sys
 from PySide2.QtWidgets import *
 from PySide2.QtCore import *
 from PySide2.QtUiTools import *
 from PySide2.QtGui import *
-import PySide2 as ps
-from PySide2 import *
-import sys, multiprocessing
-import brightestSpot
+import brightestSpot, cameraControll
 
 
 NUMBER_SECONDS_TO_WAIT = 1
@@ -16,7 +12,7 @@ NUMBER_SECONDS_TO_WAIT = 1
 class WindowApp:
     #QT INIT
     app = QApplication([])
-    ui_file = QFile("/home/pi/Desktop/cameraControllGui/form_main.ui")
+    ui_file = QFile('form_main.ui')
     ui_file.open(QFile.ReadOnly)
     loader = QUiLoader()
     window = loader.load(ui_file)

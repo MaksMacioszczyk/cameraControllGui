@@ -115,9 +115,6 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
     <property name="text">
      <string/>
     </property>
-    <property name="pixmap">
-     <pixmap>../../Pictures/Canon_700D/PIC_29-09-20--09:56:39.jpg</pixmap>
-    </property>
     <property name="scaledContents">
      <bool>true</bool>
     </property>

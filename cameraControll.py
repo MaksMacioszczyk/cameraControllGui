@@ -1,10 +1,9 @@
-import logging, os, subprocess, sys, gphoto2 as gp, shutil
+import logging, os, gphoto2 as gp, shutil
 from datetime import datetime
 
 def capture_image():
     logging.basicConfig(
                 format = '%(levelname)s: %(name)s: %(message)s', level = logging.WARNING)
-    callback_obj = gp.check_result(gp.use_python_logging())
     camera = gp.Camera()
     camera.init()
 
