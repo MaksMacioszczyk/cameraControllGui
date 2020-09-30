@@ -1,11 +1,53 @@
 import logging, os, gphoto2 as gp, shutil
 from datetime import datetime
 
-def capture_image():
+global camera
+
+def init_camera():
+
     logging.basicConfig(
-                format = '%(levelname)s: %(name)s: %(message)s', level = logging.WARNING)
+        format='%(levelname)s: %(name)s: %(message)s', level=logging.WARNING)
     camera = gp.Camera()
     camera.init()
+
+def set_shutter_speed(sh):
+
+    config = camera.get_config()
+
+    shutterspeed_config = gp.gp_widget_get_child_by_name(config, 'shutterspeed')
+    shutterspeed_config.set_value(sh)
+
+    camera.set_config(config)
+
+def set_iso(iso):
+    config = camera.get_config()
+
+
+    shutterspeed_config = gp.gp_widget_get_child_by_name(config, 'iso')
+    shutterspeed_config.set_value(iso)
+
+    camera.set_config(config)
+
+
+
+
+def capture_image(shutterspeed, iso):
+    os.system('gphoto2 --set-config /main/capturesettings/shutterspeed=' + str(shutterspeed))
+    os.system('gphoto2 --set-config /main/imgsettings/iso=' + str(iso))
+
+    logging.basicConfig(
+        format='%(levelname)s: %(name)s: %(message)s', level=logging.WARNING)
+    camera = gp.Camera()
+    camera.init()
+    # config = camera.get_config()
+    #
+    # shutterspeed_config = gp.gp_widget_get_child_by_name(config, 'shutterspeed')
+    # shutterspeed_config.set_value(shutter_speed)
+    #
+    # shutterspeed_config = gp.gp_widget_get_child_by_name(config, 'iso')
+    # shutterspeed_config.set_value(iso)
+    #
+    # camera.set_config(config)
 
     file_path = camera.capture(gp.GP_CAPTURE_IMAGE)
 

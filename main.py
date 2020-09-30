@@ -8,7 +8,6 @@ import brightestSpot, cameraControll
 
 NUMBER_SECONDS_TO_WAIT = 1
 
-
 class WindowApp:
     #QT INIT
     app = QApplication([])
@@ -18,8 +17,9 @@ class WindowApp:
     window = loader.load(ui_file)
     button = window.Button_1
     label = window.Label_1
+    label_summ = window.Label_summary
     image_label = window.Label_image
-
+    combo_sh = window.comboBox_sh
 
     def button_click(self):
         start_time = time.time()
@@ -30,13 +30,20 @@ class WindowApp:
             self.label.setText(str(round(NUMBER_SECONDS_TO_WAIT - (time.time() - start_time))))
             self.app.processEvents()
         self.button.setEnabled(True)
-        image_src = cameraControll.capture_image()
-        image_marked = brightestSpot.mark_brightest_spots(image_src)
+        sh_from_combo = self.combo_sh.currentText()
+
+        image_src = cameraControll.capture_image(sh_from_combo, "200")
+        image_marked, isFatal = brightestSpot.mark_brightest_spots(image_src)
         new_pixmap = QPixmap(image_marked)
         self.image_label.setPixmap(new_pixmap)
-
-
+        if isFatal:
+            self.label_summ.setText("Test NOT OK")
+        else:
+            self.label_summ.setText("Test OK")
     def __init__(self):
+
+
+
 
         self.button.clicked.connect(self.button_click)
         self.window.setWindowFlags(Qt.Window | Qt.FramelessWindowHint)
