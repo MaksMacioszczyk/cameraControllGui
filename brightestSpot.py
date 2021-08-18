@@ -40,7 +40,7 @@ def calculate_mean(dataset):
     return r_mean, g_mean, b_mean, luminance_mean, mask_pixels_mean
 
 
-def mark_brightest_spots(image_src):
+def mark_brightest_spots(image_src,nod):
     isFatal = False
     ACCURACY = 0.80
 
@@ -145,7 +145,7 @@ def mark_brightest_spots(image_src):
         mask_pixels_from_data = mask_pixels_tab[i]
 
         print(
-            f'{i} => {(np.absolute(r_mean - r_from_data) / r_from_data) * 100},{(np.absolute(g_mean - g_from_data) / g_from_data) * 100},{(np.absolute(b_mean - b_from_data) / b_from_data) * 100},')
+            f'{i+1} => {(np.absolute(r_mean - r_from_data) / r_from_data) * 100},{(np.absolute(g_mean - g_from_data) / g_from_data) * 100},{(np.absolute(b_mean - b_from_data) / b_from_data) * 100},')
         '''
         if r_from_data >= ACCURACY * r_mean:
             cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
@@ -207,7 +207,9 @@ def mark_brightest_spots(image_src):
                 cont = cv2.circle(image, (int(cX), int(cY)), 75,
                                   (0, 0, 255), 3)
             isFatal = True
-
+    if i+1 != int(nod):
+        print("Nie odnaleziono " + str(int(nod)-(i+1)) + " diod")
+        isFatal = True
     # cnts = contours.sort_contours(cnts)[0]
     # loop over the contours
 

@@ -25,6 +25,7 @@ class WindowApp:
     label_summ = window.Label_summary
     image_label = window.Label_image
     combo_sh = window.comboBox_sh
+    diode_label = window.num_of_diode
 
     def button_click(self):
         is_fatal = False
@@ -39,7 +40,7 @@ class WindowApp:
         sh_from_combo = self.combo_sh.currentText()
 
         image_src = cameraControll.capture_image(sh_from_combo, "200")
-        image_marked, is_fatal = brightestSpot.mark_brightest_spots(image_src)
+        image_marked, is_fatal = brightestSpot.mark_brightest_spots(image_src, self.diode_label.text())
         new_pixmap = QPixmap(image_marked)
         self.image_label.setPixmap(new_pixmap)
         if is_fatal:
