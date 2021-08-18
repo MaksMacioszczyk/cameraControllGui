@@ -1,15 +1,20 @@
-import time, sys
-from PySide2.QtWidgets import *
+import sys
+import time
+import os
+
 from PySide2.QtCore import *
-from PySide2.QtUiTools import *
 from PySide2.QtGui import *
-import brightestSpot, cameraControll
+from PySide2.QtUiTools import *
+from PySide2.QtWidgets import *
 
+import brightestSpot
+import cameraControll
 
-NUMBER_SECONDS_TO_WAIT = 1
+NUMBER_SECONDS_TO_WAIT = 0
+
 
 class WindowApp:
-    #QT INIT
+    # QT INIT
     app = QApplication([])
     ui_file = QFile('form_main.ui')
     ui_file.open(QFile.ReadOnly)
@@ -22,8 +27,9 @@ class WindowApp:
     combo_sh = window.comboBox_sh
 
     def button_click(self):
+        is_fatal = False
         start_time = time.time()
-        while ((time.time() - start_time) <= NUMBER_SECONDS_TO_WAIT):
+        while (time.time() - start_time) <= NUMBER_SECONDS_TO_WAIT:
             time.sleep(0.3)
             self.button.setEnabled(False)
             print(NUMBER_SECONDS_TO_WAIT - (time.time() - start_time))
@@ -33,21 +39,18 @@ class WindowApp:
         sh_from_combo = self.combo_sh.currentText()
 
         image_src = cameraControll.capture_image(sh_from_combo, "200")
-        image_marked, isFatal = brightestSpot.mark_brightest_spots(image_src)
+        image_marked, is_fatal = brightestSpot.mark_brightest_spots(image_src)
         new_pixmap = QPixmap(image_marked)
         self.image_label.setPixmap(new_pixmap)
-        if isFatal:
+        if is_fatal:
             self.label_summ.setText("Test NOT OK")
         else:
             self.label_summ.setText("Test OK")
+
     def __init__(self):
-
-
-
 
         self.button.clicked.connect(self.button_click)
         self.window.setWindowFlags(Qt.Window | Qt.FramelessWindowHint)
-
 
         self.show_window()
 
@@ -55,10 +58,8 @@ class WindowApp:
         self.window.show()
 
 
-
-
-
 if __name__ == "__main__":
     window_application = WindowApp()
+    os.system("pkill vfsd-gphoto2")
 
     sys.exit(window_application.app.exec_())
