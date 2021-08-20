@@ -62,8 +62,8 @@
    <widget class="QPushButton" name="Button_1">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>970</y>
+      <x>20</x>
+      <y>680</y>
       <width>191</width>
       <height>101</height>
      </rect>
@@ -76,15 +76,16 @@
 font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
     </property>
     <property name="text">
-     <string>Test(Zrób zdjęcie)</string>
+     <string>Test
+(zrób zdjęcie)</string>
     </property>
    </widget>
    <widget class="QLabel" name="Label_1">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>240</y>
-      <width>151</width>
+      <x>20</x>
+      <y>260</y>
+      <width>191</width>
       <height>81</height>
      </rect>
     </property>
@@ -96,6 +97,9 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
     <property name="styleSheet">
      <string notr="true"/>
     </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -106,11 +110,14 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
    <widget class="QLabel" name="Label_image">
     <property name="geometry">
      <rect>
-      <x>260</x>
-      <y>60</y>
-      <width>1161</width>
+      <x>240</x>
+      <y>20</y>
+      <width>1181</width>
       <height>881</height>
      </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
     </property>
     <property name="text">
      <string/>
@@ -122,7 +129,7 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
    <widget class="QComboBox" name="comboBox_sh">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>30</y>
       <width>161</width>
       <height>32</height>
@@ -167,9 +174,9 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
    <widget class="QLabel" name="Label_summary">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>120</y>
-      <width>181</width>
+      <x>20</x>
+      <y>190</y>
+      <width>191</width>
       <height>71</height>
      </rect>
     </property>
@@ -181,6 +188,9 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
       <bold>true</bold>
      </font>
     </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -191,9 +201,9 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
    <widget class="QLineEdit" name="num_of_diode">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>20</x>
       <y>90</y>
-      <width>121</width>
+      <width>161</width>
       <height>20</height>
      </rect>
     </property>
@@ -201,20 +211,32 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
      <string>Wpisz ilość diod</string>
     </property>
     <property name="text">
+     <string/>
+    </property>
+    <property name="frame">
+     <bool>true</bool>
+    </property>
+    <property name="placeholderText">
      <string>Wpisz ilość diod</string>
+    </property>
+    <property name="clearButtonEnabled">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="Label_sh_text">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>0</x>
       <y>10</y>
       <width>191</width>
-      <height>16</height>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>Wybierz prędkość migawki</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="Label_led_text">
@@ -229,6 +251,9 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
     <property name="text">
      <string>Docelowa ilość diod:</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QLabel" name="Label_data">
     <property name="geometry">
@@ -239,10 +264,223 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
       <height>1031</height>
      </rect>
     </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Label_info">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>340</y>
+      <width>191</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
     <property name="text">
      <string/>
     </property>
    </widget>
+   <widget class="QPushButton" name="Button_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>850</y>
+      <width>191</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="palette">
+     <palette>
+      <active>
+       <colorrole role="Button">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>67</red>
+          <green>155</green>
+          <blue>232</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>67</red>
+          <green>155</green>
+          <blue>232</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Window">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>67</red>
+          <green>155</green>
+          <blue>232</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </active>
+      <inactive>
+       <colorrole role="Button">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>67</red>
+          <green>155</green>
+          <blue>232</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>67</red>
+          <green>155</green>
+          <blue>232</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Window">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>67</red>
+          <green>155</green>
+          <blue>232</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </inactive>
+      <disabled>
+       <colorrole role="Button">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>67</red>
+          <green>155</green>
+          <blue>232</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>67</red>
+          <green>155</green>
+          <blue>232</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Window">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>67</red>
+          <green>155</green>
+          <blue>232</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </disabled>
+     </palette>
+    </property>
+    <property name="cursor">
+     <cursorShape>CrossCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(67, 155, 232);
+font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Wzór
+(zrób zjdęcie)</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Button_3">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>960</y>
+      <width>191</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>CrossCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(91, 186, 61);
+font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Test i porównanie
+(zrób zdjęcie)</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Label_info_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>650</y>
+      <width>211</width>
+      <height>421</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>Panel obsługi aparatu</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignHCenter|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Label_info_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>140</y>
+      <width>211</width>
+      <height>321</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>Panel z informacjami</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignHCenter|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <zorder>Label_info_3</zorder>
+   <zorder>Label_info_2</zorder>
+   <zorder>Button_1</zorder>
+   <zorder>Label_1</zorder>
+   <zorder>Label_image</zorder>
+   <zorder>comboBox_sh</zorder>
+   <zorder>Label_summary</zorder>
+   <zorder>num_of_diode</zorder>
+   <zorder>Label_sh_text</zorder>
+   <zorder>Label_led_text</zorder>
+   <zorder>Label_data</zorder>
+   <zorder>Label_info</zorder>
+   <zorder>Button_2</zorder>
+   <zorder>Button_3</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

@@ -11,17 +11,9 @@ from skimage import measure
 
 IMAGE_PATH = '/home/' + getpass.getuser() + '/Pictures/Canon_700D/'
 
-data = {
-    "Index": [],
-    "Mask": [],
-    "R": [],
-    "G": [],
-    "B": [],
-    "Luminance": [],
-    "Mask_Pixels": []
-}
 
 isFatal = False
+
 
 
 def calculate_mean(dataset):
@@ -41,23 +33,26 @@ def calculate_mean(dataset):
     return r_mean, g_mean, b_mean, luminance_mean, mask_pixels_mean
 
 
-def mark_brightest_spots(image_src,nod):
-    isFatal = False
-    ACCURACY = 0.80
-    ACCURACY_MID = 0.70
-    ACCURACY_LOW = 0.60
-
-
-
-    data = {
+def mark_brightest_spots(image_src, nod):
+    mark_brightest_spots.data = {
         "Index": [],
         "Mask": [],
         "R": [],
         "G": [],
         "B": [],
         "Luminance": [],
-        "Mask_Pixels": []
+        "Mask_Pixels": [],
+        "isPassed": [],
+        "X": [],
+        "Y": []
     }
+
+    isFatal = False
+    ACCURACY = 0.80
+    ACCURACY_MID = 0.70
+    ACCURACY_LOW = 0.60
+
+
     i = 0
     image = image_src
 
@@ -90,7 +85,7 @@ def mark_brightest_spots(image_src,nod):
     mean_pixels_num = statistics.mean(pixels_tab) * 0.2
     i = 0
     for label in np.unique(labels):
-        data["Index"].append(i)
+        mark_brightest_spots.data["Index"].append(i)
         # if this is the background label, ignore it
         if label == 0:
             i = i + 1
@@ -112,12 +107,12 @@ def mark_brightest_spots(image_src,nod):
             brightness = (0.2126 * R + 0.7152 * G + 0.0722 * B)
             print(
                 f"{i} => {(round(R, 1))}, {round(G, 1)}, {round(B, 1)} Luminance => {round(brightness, 1)}, number of pixels: {numPixels}")
-            data["Mask"].append(labelMask)
-            data["R"].append(R)
-            data["G"].append(G)
-            data["B"].append(B)
-            data["Luminance"].append(brightness)
-            data["Mask_Pixels"].append(numPixels)
+            mark_brightest_spots.data["Mask"].append(labelMask)
+            mark_brightest_spots.data["R"].append(R)
+            mark_brightest_spots.data["G"].append(G)
+            mark_brightest_spots.data["B"].append(B)
+            mark_brightest_spots.data["Luminance"].append(brightness)
+            mark_brightest_spots.data["Mask_Pixels"].append(numPixels)
 
             cnts = cv2.findContours(labelMask.copy(), cv2.RETR_EXTERNAL,
                                     cv2.CHAIN_APPROX_SIMPLE)
@@ -126,22 +121,31 @@ def mark_brightest_spots(image_src,nod):
                 # draw the bright spot on the image
                 (x, y, w, h) = cv2.boundingRect(c)
                 ((cX, cY), radius) = cv2.minEnclosingCircle(c)
+
+                mark_brightest_spots.data["X"].append(cX)
+                mark_brightest_spots.data["Y"].append(cY)
+
                 cont = cv2.circle(image, (int(cX), int(cY)), 75,
                                   (0, 255, 0), 3)
                 cv2.putText(image, "#{}".format(i), (x, y - 15),
                             cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 255, 0), 4)
             i += 1
 
-    r_mean, g_mean, b_mean, luminance_mean, mask_pixels_mean = calculate_mean(data)
+    r_mean, g_mean, b_mean, luminance_mean, mask_pixels_mean = calculate_mean(mark_brightest_spots.data)
 
-    mask_tab = data["Mask"]
-    r_tab = data["R"]
-    g_tab = data["G"]
-    b_tab = data["B"]
-    luminace_tab = data["Luminance"]
-    mask_pixels_tab = data["Mask_Pixels"]
+    mask_tab =  mark_brightest_spots.data["Mask"]
+    r_tab =  mark_brightest_spots.data["R"]
+    g_tab =  mark_brightest_spots.data["G"]
+    b_tab =  mark_brightest_spots.data["B"]
+    luminace_tab =  mark_brightest_spots.data["Luminance"]
+    mask_pixels_tab =  mark_brightest_spots.data["Mask_Pixels"]
 
-    for i in range(0, len(data["R"]) - 1):
+
+
+
+    for i in range(0, len( mark_brightest_spots.data["R"])):
+        wyk = 0
+        isFatal = False
         mask_from_data = mask_tab[i]
         r_from_data = r_tab[i]
         g_from_data = g_tab[i]
@@ -199,7 +203,8 @@ def mark_brightest_spots(image_src,nod):
                                   (51, 196, 255), 3)
             isFatal = True
 
-        if luminace_from_data > (luminance_mean + (1-ACCURACY_MID) * luminance_mean) or luminace_from_data < (luminance_mean - (1 - ACCURACY) * luminance_mean):
+
+        elif luminace_from_data > (luminance_mean + (1-ACCURACY_MID) * luminance_mean) or luminace_from_data < (luminance_mean - (1 - ACCURACY) * luminance_mean):
             print(f'illuminance VERY not OK, illuminance is {luminace_from_data}, mean is {luminance_mean}')
             cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
                                     cv2.CHAIN_APPROX_SIMPLE)
@@ -212,7 +217,7 @@ def mark_brightest_spots(image_src,nod):
                                   (0,230,255), 3)
             isFatal = True
 
-        if luminace_from_data > (luminance_mean + (1-ACCURACY_LOW) * luminance_mean) or luminace_from_data < (luminance_mean - (1 - ACCURACY) * luminance_mean):
+        elif luminace_from_data > (luminance_mean + (1-ACCURACY_LOW) * luminance_mean) or luminace_from_data < (luminance_mean - (1 - ACCURACY) * luminance_mean):
             print(f'illuminance VERY not OK, illuminance is {luminace_from_data}, mean is {luminance_mean}')
             cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
                                     cv2.CHAIN_APPROX_SIMPLE)
@@ -224,6 +229,9 @@ def mark_brightest_spots(image_src,nod):
                 cont = cv2.circle(image, (int(cX), int(cY)), 75,
                                   (0, 0, 255), 3)
             isFatal = True
+            wyk = 1
+            mark_brightest_spots.data["isPassed"].append(False)
+
 
 
         if mask_pixels_from_data > (mask_pixels_mean + (1-ACCURACY) * mask_pixels_mean) or mask_pixels_from_data < (mask_pixels_mean - (1 - ACCURACY) * mask_pixels_mean):
@@ -240,7 +248,7 @@ def mark_brightest_spots(image_src,nod):
                                   (51, 196, 255), 3)
             isFatal = True
 
-        if mask_pixels_from_data > (mask_pixels_mean + (1 - ACCURACY_MID) * mask_pixels_mean) or mask_pixels_from_data < (mask_pixels_mean - (1 - ACCURACY_MID) * mask_pixels_mean):
+        elif mask_pixels_from_data > (mask_pixels_mean + (1 - ACCURACY_MID) * mask_pixels_mean) or mask_pixels_from_data < (mask_pixels_mean - (1 - ACCURACY_MID) * mask_pixels_mean):
             print(f'radius of glow is  not OK, radius in pixel is {mask_pixels_from_data}, mean is {mask_pixels_mean}')
 
             cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
@@ -254,7 +262,7 @@ def mark_brightest_spots(image_src,nod):
                                   (0, 230, 255), 3)
             isFatal = True
 
-        if mask_pixels_from_data > (mask_pixels_mean + (1-ACCURACY_LOW) * mask_pixels_mean) or mask_pixels_from_data < (mask_pixels_mean - (1 - ACCURACY_LOW) * mask_pixels_mean):
+        elif mask_pixels_from_data > (mask_pixels_mean + (1-ACCURACY_LOW) * mask_pixels_mean) or mask_pixels_from_data < (mask_pixels_mean - (1 - ACCURACY_LOW) * mask_pixels_mean):
             print(f'radius of glow is VERY not OK, radius in pixel is {mask_pixels_from_data}, mean is {mask_pixels_mean}')
 
             cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
@@ -267,6 +275,13 @@ def mark_brightest_spots(image_src,nod):
                 cont = cv2.circle(image, (int(cX), int(cY)), 75,
                                   (0,0, 255), 3)
             isFatal = True
+            if wyk == 0:
+                mark_brightest_spots.data["isPassed"].append(False)
+                wyk = 1
+
+        if wyk == 0:
+            mark_brightest_spots.data["isPassed"].append(True)
+
     if i+1 != int(nod):
         print("Nie odnaleziono " + str(int(nod)-(i+1)) + " diod")
         isFatal = True
@@ -282,6 +297,8 @@ def mark_brightest_spots(image_src,nod):
     #     cv2.putText(image, "#{}".format(i + 1), (x, y - 15),
     #                 cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 4)
 
+
+
     if not os.path.exists(IMAGE_PATH):
         os.mkdir(IMAGE_PATH)
     cv2.imwrite(IMAGE_PATH + os.path.basename(image_src), image)
@@ -289,3 +306,5 @@ def mark_brightest_spots(image_src,nod):
     return IMAGE_PATH + os.path.basename(image_src), isFatal
 
 # mark_brightest_spots(IMAGE_PATH + 'PIC_29-09-20--14:35:08.jpg')
+def return_data():
+    return  mark_brightest_spots.data
