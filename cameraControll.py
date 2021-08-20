@@ -2,10 +2,13 @@ import gphoto2 as gp
 import logging
 import os
 import shutil
+import getpass
+
 from datetime import datetime
 
 global camera
-IMAGE_PATH = '/home/cezos/Pictures/Canon_700D/'
+
+IMAGE_PATH = '/home/' + getpass.getuser() + '/Pictures/Canon_700D/'
 
 
 def init_camera():
