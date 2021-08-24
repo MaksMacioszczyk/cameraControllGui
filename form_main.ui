@@ -111,9 +111,9 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
     <property name="geometry">
      <rect>
       <x>240</x>
-      <y>20</y>
+      <y>10</y>
       <width>1181</width>
-      <height>881</height>
+      <height>891</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -259,9 +259,9 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
     <property name="geometry">
      <rect>
       <x>1440</x>
-      <y>20</y>
-      <width>461</width>
-      <height>1031</height>
+      <y>210</y>
+      <width>471</width>
+      <height>841</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -288,6 +288,9 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="Button_2">
@@ -467,6 +470,313 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
      <set>Qt::AlignHCenter|Qt::AlignTop</set>
     </property>
    </widget>
+   <widget class="QPushButton" name="close_images_button">
+    <property name="geometry">
+     <rect>
+      <x>1450</x>
+      <y>80</y>
+      <width>191</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(50, 100, 150);
+font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Zamknij wszystkie 
+okna ze zdjęciami</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="exit_button">
+    <property name="geometry">
+     <rect>
+      <x>1660</x>
+      <y>20</y>
+      <width>241</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 0, 0);
+font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Zamknij program</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Label_data_2">
+    <property name="geometry">
+     <rect>
+      <x>1440</x>
+      <y>10</y>
+      <width>471</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>920</y>
+      <width>241</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>Legenda:</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignHCenter|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>950</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 50, 255);
+font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignHCenter|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>990</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 101, 30);
+font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignHCenter|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>1030</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 0, 0);
+font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignHCenter|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_green">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>950</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>=&gt; 10%</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_orange">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>990</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>=&gt; 20%</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_red">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>1030</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>=&gt; 30%</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>920</y>
+      <width>141</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string>Margines błędu</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignHCenter|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="accuracy_user">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>950</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Podaj wartość w procentach</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="frame">
+     <bool>true</bool>
+    </property>
+    <property name="placeholderText">
+     <string>Wpisz ilość diod</string>
+    </property>
+    <property name="clearButtonEnabled">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_green_2">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>950</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>%</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="accept_accuracy">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>1010</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Zaakceptuj</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>950</y>
+      <width>31</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 255, 50);
+font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignHCenter|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_green_3">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>950</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>=&gt; OK</string>
+    </property>
+   </widget>
+   <zorder>label</zorder>
+   <zorder>Label_data_2</zorder>
    <zorder>Label_info_3</zorder>
    <zorder>Label_info_2</zorder>
    <zorder>Button_1</zorder>
@@ -481,6 +791,20 @@ font: 75 14pt &quot;Bitstream Vera Sans&quot;;</string>
    <zorder>Label_info</zorder>
    <zorder>Button_2</zorder>
    <zorder>Button_3</zorder>
+   <zorder>close_images_button</zorder>
+   <zorder>exit_button</zorder>
+   <zorder>label_2</zorder>
+   <zorder>label_3</zorder>
+   <zorder>label_4</zorder>
+   <zorder>label_green</zorder>
+   <zorder>label_orange</zorder>
+   <zorder>label_red</zorder>
+   <zorder>label_5</zorder>
+   <zorder>accuracy_user</zorder>
+   <zorder>label_green_2</zorder>
+   <zorder>accept_accuracy</zorder>
+   <zorder>label_6</zorder>
+   <zorder>label_green_3</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

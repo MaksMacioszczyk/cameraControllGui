@@ -5,13 +5,17 @@ import imutils
 import numpy as np
 import os
 import matplotlib.pyplot as plt
+import getpass
 
 from imutils import contours
 from skimage import measure
 
-IMAGE_PATH = '/home/' + getpass.getuser() + '/Pictures/Canon_700D/'
+IMAGE_PATH = '/home/'+getpass.getuser()+'/Pictures/Canon_700D/'
 
-
+if not os.path.isdir(IMAGE_PATH):
+        os.makedirs(IMAGE_PATH)
+        
+        
 isFatal = False
 
 
@@ -33,7 +37,7 @@ def calculate_mean(dataset):
     return r_mean, g_mean, b_mean, luminance_mean, mask_pixels_mean
 
 
-def mark_brightest_spots(image_src, nod):
+def mark_brightest_spots(image_src, nod,acc):
     mark_brightest_spots.data = {
         "Index": [],
         "Mask": [],
@@ -48,9 +52,9 @@ def mark_brightest_spots(image_src, nod):
     }
 
     isFatal = False
-    ACCURACY = 0.80
-    ACCURACY_MID = 0.70
-    ACCURACY_LOW = 0.60
+    ACCURACY = acc
+    ACCURACY_MID = acc - 0.1
+    ACCURACY_LOW = acc - 0.2
 
 
     i = 0
@@ -65,10 +69,7 @@ def mark_brightest_spots(image_src, nod):
     thresh = cv2.erode(thresh, None, iterations=2)
     thresh = cv2.dilate(thresh, None, iterations=4)
 
-    # plt.imshow(thresh, cmap=plt.cm.gray)
-    # plt.show()
-
-    labels = measure.label(thresh, neighbors=8, background=0)
+    labels = measure.label(thresh, background=0)
     mask = np.zeros(thresh.shape, dtype="uint8")
     # loop over the unique components
     pixels_tab = list()
@@ -114,8 +115,7 @@ def mark_brightest_spots(image_src, nod):
             mark_brightest_spots.data["Luminance"].append(brightness)
             mark_brightest_spots.data["Mask_Pixels"].append(numPixels)
 
-            cnts = cv2.findContours(labelMask.copy(), cv2.RETR_EXTERNAL,
-                                    cv2.CHAIN_APPROX_SIMPLE)
+            cnts = cv2.findContours(labelMask.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
             cnts = imutils.grab_contours(cnts)
             for (k, c) in enumerate(cnts):
                 # draw the bright spot on the image
@@ -127,8 +127,7 @@ def mark_brightest_spots(image_src, nod):
 
                 cont = cv2.circle(image, (int(cX), int(cY)), 75,
                                   (0, 255, 0), 3)
-                cv2.putText(image, "#{}".format(i), (x, y - 15),
-                            cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 255, 0), 4)
+                cv2.putText(image, "#{}".format(i), (x, y - 15),cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 255, 0), 4)
             i += 1
 
     r_mean, g_mean, b_mean, luminance_mean, mask_pixels_mean = calculate_mean(mark_brightest_spots.data)
@@ -141,10 +140,9 @@ def mark_brightest_spots(image_src, nod):
     mask_pixels_tab =  mark_brightest_spots.data["Mask_Pixels"]
 
 
-
+    isFatal = False 
 
     for i in range(0, len( mark_brightest_spots.data["R"])):
-        wyk = 0
         isFatal = False
         mask_from_data = mask_tab[i]
         r_from_data = r_tab[i]
@@ -155,41 +153,7 @@ def mark_brightest_spots(image_src, nod):
 
         print(
             f'{i+1} => {(np.absolute(r_mean - r_from_data) / r_from_data) * 100},{(np.absolute(g_mean - g_from_data) / g_from_data) * 100},{(np.absolute(b_mean - b_from_data) / b_from_data) * 100},')
-        '''
-        if r_from_data >= ACCURACY * r_mean:
-            cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
-                                    cv2.CHAIN_APPROX_SIMPLE)
-            cnts = imutils.grab_contours(cnts)
-            for (k, c) in enumerate(cnts):
-                # draw the bright spot on the image
-                (x, y, w, h) = cv2.boundingRect(c)
-                ((cX, cY), radius) = cv2.minEnclosingCircle(c)
-                cont = cv2.circle(image, (int(cX), int(cY)), 75,
-                                  (0, 0, 255), 3)
-            isFatal = True
-        if g_from_data >= ACCURACY * g_mean:
-            cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
-                                    cv2.CHAIN_APPROX_SIMPLE)
-            cnts = imutils.grab_contours(cnts)
-            for (k, c) in enumerate(cnts):
-                # draw the bright spot on the image
-                (x, y, w, h) = cv2.boundingRect(c)
-                ((cX, cY), radius) = cv2.minEnclosingCircle(c)
-                cont = cv2.circle(image, (int(cX), int(cY)), 75,
-                                  (0, 0, 255), 3)
-            isFatal = True
-        if b_from_data >= ACCURACY * b_mean:
-            cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
-                                    cv2.CHAIN_APPROX_SIMPLE)
-            cnts = imutils.grab_contours(cnts)
-            for (k, c) in enumerate(cnts):
-                # draw the bright spot on the image
-                (x, y, w, h) = cv2.boundingRect(c)
-                ((cX, cY), radius) = cv2.minEnclosingCircle(c)
-                cont = cv2.circle(image, (int(cX), int(cY)), 75,
-                                  (0, 0, 255), 3)
-            isFatal = True
-        '''
+      
         if luminace_from_data > (luminance_mean + (1-ACCURACY) * luminance_mean) or luminace_from_data < (luminance_mean - (1 - ACCURACY) * luminance_mean):
             print(f'illuminance not OK, illuminance is {luminace_from_data}, mean is {luminance_mean}')
             cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
@@ -200,11 +164,11 @@ def mark_brightest_spots(image_src, nod):
                 (x, y, w, h) = cv2.boundingRect(c)
                 ((cX, cY), radius) = cv2.minEnclosingCircle(c)
                 cont = cv2.circle(image, (int(cX), int(cY)), 75,
-                                  (51, 196, 255), 3)
+                                  (255, 50, 0), 3)
             isFatal = True
+           
 
-
-        elif luminace_from_data > (luminance_mean + (1-ACCURACY_MID) * luminance_mean) or luminace_from_data < (luminance_mean - (1 - ACCURACY) * luminance_mean):
+        elif luminace_from_data > (luminance_mean + (1-ACCURACY_MID) * luminance_mean) or luminace_from_data < (luminance_mean - (1 - ACCURACY_MID) * luminance_mean):
             print(f'illuminance VERY not OK, illuminance is {luminace_from_data}, mean is {luminance_mean}')
             cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
                                     cv2.CHAIN_APPROX_SIMPLE)
@@ -216,11 +180,10 @@ def mark_brightest_spots(image_src, nod):
                 cont = cv2.circle(image, (int(cX), int(cY)), 75,
                                   (0,230,255), 3)
             isFatal = True
-
-        elif luminace_from_data > (luminance_mean + (1-ACCURACY_LOW) * luminance_mean) or luminace_from_data < (luminance_mean - (1 - ACCURACY) * luminance_mean):
+            
+        elif luminace_from_data > (luminance_mean + (1-ACCURACY_LOW) * luminance_mean) or luminace_from_data < (luminance_mean - (1 - ACCURACY_LOW) * luminance_mean):
             print(f'illuminance VERY not OK, illuminance is {luminace_from_data}, mean is {luminance_mean}')
-            cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
-                                    cv2.CHAIN_APPROX_SIMPLE)
+            cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
             cnts = imutils.grab_contours(cnts)
             for (k, c) in enumerate(cnts):
                 # draw the bright spot on the image
@@ -229,62 +192,62 @@ def mark_brightest_spots(image_src, nod):
                 cont = cv2.circle(image, (int(cX), int(cY)), 75,
                                   (0, 0, 255), 3)
             isFatal = True
-            wyk = 1
-            mark_brightest_spots.data["isPassed"].append(False)
+        else:
+            if mask_pixels_from_data > (mask_pixels_mean + (1-ACCURACY) * mask_pixels_mean) or mask_pixels_from_data < (mask_pixels_mean - (1 - ACCURACY) * mask_pixels_mean):
+                print(f'radius of glow is  not OK, radius in pixel is {mask_pixels_from_data}, mean is {mask_pixels_mean}')
 
+                cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
+                                        cv2.CHAIN_APPROX_SIMPLE)
+                cnts = imutils.grab_contours(cnts)
+                for (k, c) in enumerate(cnts):
+                    # draw the bright spot on the image
+                    (x, y, w, h) = cv2.boundingRect(c)
+                    ((cX, cY), radius) = cv2.minEnclosingCircle(c)
+                    cont = cv2.circle(image, (int(cX), int(cY)), 75,
+                                      (255, 50, 0), 3)
+                isFatal = True
+           
+            elif mask_pixels_from_data > (mask_pixels_mean + (1 - ACCURACY_MID) * mask_pixels_mean) or mask_pixels_from_data < (mask_pixels_mean - (1 - ACCURACY_MID) * mask_pixels_mean):
+                print(f'radius of glow is  not OK, radius in pixel is {mask_pixels_from_data}, mean is {mask_pixels_mean}')
 
+                cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
+                                        cv2.CHAIN_APPROX_SIMPLE)
+                cnts = imutils.grab_contours(cnts)
+                for (k, c) in enumerate(cnts):
+                    # draw the bright spot on the image
+                    (x, y, w, h) = cv2.boundingRect(c)
+                    ((cX, cY), radius) = cv2.minEnclosingCircle(c)
+                    cont = cv2.circle(image, (int(cX), int(cY)), 75,
+                                      (0, 230, 255), 3)
+                isFatal = True
+                
 
-        if mask_pixels_from_data > (mask_pixels_mean + (1-ACCURACY) * mask_pixels_mean) or mask_pixels_from_data < (mask_pixels_mean - (1 - ACCURACY) * mask_pixels_mean):
-            print(f'radius of glow is  not OK, radius in pixel is {mask_pixels_from_data}, mean is {mask_pixels_mean}')
+            elif mask_pixels_from_data > (mask_pixels_mean + (1-ACCURACY_LOW) * mask_pixels_mean) or mask_pixels_from_data < (mask_pixels_mean - (1 - ACCURACY_LOW) * mask_pixels_mean):
+                print(f'radius of glow is VERY not OK, radius in pixel is {mask_pixels_from_data}, mean is {mask_pixels_mean}')
 
-            cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
-                                    cv2.CHAIN_APPROX_SIMPLE)
-            cnts = imutils.grab_contours(cnts)
-            for (k, c) in enumerate(cnts):
-                # draw the bright spot on the image
-                (x, y, w, h) = cv2.boundingRect(c)
-                ((cX, cY), radius) = cv2.minEnclosingCircle(c)
-                cont = cv2.circle(image, (int(cX), int(cY)), 75,
-                                  (51, 196, 255), 3)
-            isFatal = True
+                cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
+                                        cv2.CHAIN_APPROX_SIMPLE)
+                cnts = imutils.grab_contours(cnts)
+                for (k, c) in enumerate(cnts):
+                    # draw the bright spot on the image
+                    (x, y, w, h) = cv2.boundingRect(c)
+                    ((cX, cY), radius) = cv2.minEnclosingCircle(c)
+                    cont = cv2.circle(image, (int(cX), int(cY)), 75,
+                                      (0,0, 255), 3)
+                isFatal = True
+           
+        
+            
 
-        elif mask_pixels_from_data > (mask_pixels_mean + (1 - ACCURACY_MID) * mask_pixels_mean) or mask_pixels_from_data < (mask_pixels_mean - (1 - ACCURACY_MID) * mask_pixels_mean):
-            print(f'radius of glow is  not OK, radius in pixel is {mask_pixels_from_data}, mean is {mask_pixels_mean}')
-
-            cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
-                                    cv2.CHAIN_APPROX_SIMPLE)
-            cnts = imutils.grab_contours(cnts)
-            for (k, c) in enumerate(cnts):
-                # draw the bright spot on the image
-                (x, y, w, h) = cv2.boundingRect(c)
-                ((cX, cY), radius) = cv2.minEnclosingCircle(c)
-                cont = cv2.circle(image, (int(cX), int(cY)), 75,
-                                  (0, 230, 255), 3)
-            isFatal = True
-
-        elif mask_pixels_from_data > (mask_pixels_mean + (1-ACCURACY_LOW) * mask_pixels_mean) or mask_pixels_from_data < (mask_pixels_mean - (1 - ACCURACY_LOW) * mask_pixels_mean):
-            print(f'radius of glow is VERY not OK, radius in pixel is {mask_pixels_from_data}, mean is {mask_pixels_mean}')
-
-            cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
-                                    cv2.CHAIN_APPROX_SIMPLE)
-            cnts = imutils.grab_contours(cnts)
-            for (k, c) in enumerate(cnts):
-                # draw the bright spot on the image
-                (x, y, w, h) = cv2.boundingRect(c)
-                ((cX, cY), radius) = cv2.minEnclosingCircle(c)
-                cont = cv2.circle(image, (int(cX), int(cY)), 75,
-                                  (0,0, 255), 3)
-            isFatal = True
-            if wyk == 0:
-                mark_brightest_spots.data["isPassed"].append(False)
-                wyk = 1
-
-        if wyk == 0:
+        if isFatal == False:
             mark_brightest_spots.data["isPassed"].append(True)
-
+        else:
+            mark_brightest_spots.data["isPassed"].append(False)
     if i+1 != int(nod):
-        print("Nie odnaleziono " + str(int(nod)-(i+1)) + " diod")
+        not_enough = int(nod)-(i+1)
         isFatal = True
+    else:
+        not_enough = 0
     # cnts = contours.sort_contours(cnts)[0]
     # loop over the contours
 
@@ -303,7 +266,7 @@ def mark_brightest_spots(image_src, nod):
         os.mkdir(IMAGE_PATH)
     cv2.imwrite(IMAGE_PATH + os.path.basename(image_src), image)
     cv2.waitKey(0)
-    return IMAGE_PATH + os.path.basename(image_src), isFatal
+    return IMAGE_PATH + os.path.basename(image_src), isFatal, not_enough
 
 # mark_brightest_spots(IMAGE_PATH + 'PIC_29-09-20--14:35:08.jpg')
 def return_data():

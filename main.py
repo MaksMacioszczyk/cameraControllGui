@@ -32,10 +32,19 @@ class WindowApp:
     diode_label = window.num_of_diode
     label_data = window.Label_data
     label_info = window.Label_info
+    button_close_images = window.close_images_button
+    button_exit = window.exit_button
+    user_accuracy_label = window.accuracy_user
+    button_accuracy = window.accept_accuracy
+    label_green = window.label_green
+    label_orange = window.label_orange
+    label_red = window.label_red
+    
 
     curr_template_image = ""#"/home/cezos/Pictures/Canon_700D/PIC_20-08-21--09:31:33.jpg"
-
-
+    ACC = 0.9
+    def close_extra_windows(self):
+        cv2.destroyAllWindows()
     def display_data(self, data):
         text = ""
         isPassed = data["isPassed"]
@@ -58,30 +67,33 @@ class WindowApp:
             self.label_info.setText("Wypełnij wszystkie pola")
             return
         is_fatal = False
-        start_time = time.time()
-        while (time.time() - start_time) <= NUMBER_SECONDS_TO_WAIT:
-            time.sleep(0.3)
-            self.button.setEnabled(False)
-            print(NUMBER_SECONDS_TO_WAIT - (time.time() - start_time))
-            self.label.setText(str(round(NUMBER_SECONDS_TO_WAIT - (time.time() - start_time))))
-            self.app.processEvents()
+#         start_time = time.time()
+#         while (time.time() - start_time) <= NUMBER_SECONDS_TO_WAIT:
+#             time.sleep(0.3)
+#             self.button.setEnabled(False)
+#             print(NUMBER_SECONDS_TO_WAIT - (time.time() - start_time))
+#             self.label.setText(str(round(NUMBER_SECONDS_TO_WAIT - (time.time() - start_time))))
+#             self.app.processEvents()
         self.button.setEnabled(True)
         sh_from_combo = self.combo_sh.currentText()
 
         image_src = cameraControll.capture_image(sh_from_combo, "200")#'/home/cezos/Pictures/Canon_700D/PIC_20-08-21--09:34:16.jpg'
-        image_marked, is_fatal = brightestSpot.mark_brightest_spots(image_src, self.diode_label.text())
+        image_marked, is_fatal, not_enough = brightestSpot.mark_brightest_spots(image_src, self.diode_label.text(),self.ACC)
         new_pixmap = QPixmap(image_marked)
         self.image_label.setPixmap(new_pixmap)
         if is_fatal:
             self.label_summ.setText("Test NOT OK")
         else:
             self.label_summ.setText("Test OK")
-
+        if not not_enough == 0:
+            self.label_info.setText("Brakuje "+str(not_enough)+" diod")
+        else:
+            self.label_info.setText("Poprawna ilość diod")
         data = brightestSpot.return_data()
         self.display_data(data)
 
     def button_takePicture_click(self):
-        self.curr_template_image = cameraControll.capture_image("1/500", "200")
+        self.curr_template_image = cameraControll.capture_image("1/60", "200")
 
     def button_test_n_compare_click(self):
         self.button_click()
@@ -90,13 +102,15 @@ class WindowApp:
         width, height = 100, 100
         cropped_imgs = []
         ile = 0
+        
         for i in range(0, len(data["R"])):
 
             if(data["isPassed"][i] == False):
                 if(ile>=3):
                     images = np.concatenate(cropped_imgs)
-                    cv2.imshow("Wadliwe diody", images)
-                    cv2.waitKey(0)
+                    window_name = "Wadliwe_diody_" + str(i+1)
+                    cv2.imshow(window_name, images)
+                    #cv2.waitKey(0)
                     cropped_imgs = []
                     ile=0
                 x = int(round(data["X"][i],1))
@@ -105,8 +119,8 @@ class WindowApp:
                 ile+=1
         try:
             images = np.concatenate(cropped_imgs)
-            cv2.imshow("Wadliwe diody2", images)
-            cv2.waitKey(0)
+            cv2.imshow("Wadliwe diody", images)
+            #cv2.waitKey(0)
         except:
             return
 
@@ -117,12 +131,26 @@ class WindowApp:
         self.button_takePicture.clicked.connect(self.button_takePicture_click)
         self.button_test_n_compare.clicked.connect(self.button_test_n_compare_click)
         self.window.setWindowFlags(Qt.Window | Qt.FramelessWindowHint)
-
+        self.button_exit.clicked.connect(self.exit)
+        self.button_close_images.clicked.connect(self.close_extra_windows)
+        self.button_accuracy.clicked.connect(self.set_accuracy)
         self.show_window()
-
+        
+    def set_accuracy(self):
+        accuracy = int(self.user_accuracy_label.text())
+        self.ACC = (100 - accuracy)/100 
+        self.label_green.setText("=> " + str(accuracy) + "%")
+        self.label_orange.setText("=> " + str(accuracy + 10) + "%")
+        self.label_red.setText("=> " + str(accuracy + 20) + "%")
+        
+        
     def show_window(self):
         self.window.show()
-
+    def exit(self):
+        window_application = WindowApp()
+        os.system("pkill vfsd-gphoto2")
+        sys.exit(window_application.app.exec_())
+    
 
 
 
@@ -131,3 +159,4 @@ if __name__ == "__main__":
     os.system("pkill vfsd-gphoto2")
 
     sys.exit(window_application.app.exec_())
+

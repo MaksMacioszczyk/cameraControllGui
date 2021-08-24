@@ -8,7 +8,10 @@ from datetime import datetime
 
 global camera
 
-IMAGE_PATH = '/home/' + getpass.getuser() + '/Pictures/Canon_700D/'
+IMAGE_PATH = '/home/'+getpass.getuser()+'/Pictures/Canon_700D/'
+
+if not os.path.isdir(IMAGE_PATH):
+        os.makedirs(IMAGE_PATH)
 
 
 def init_camera():
