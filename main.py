@@ -3,6 +3,8 @@ import time
 import os
 import numpy as np
 import cv2
+import getpass as gp
+import shutil
 
 from PySide2.QtCore import *
 from PySide2.QtGui import *
@@ -147,6 +149,15 @@ class WindowApp:
     def show_window(self):
         self.window.show()
     def exit(self):
+        IMAGE_PATH = '/home/' + gp.getuser() +'/Pictures/Canon_700D'
+        for root,dirs,files in os.walk(IMAGE_PATH):
+            for file in files:
+                file_path = os.path.join(root,file)
+                os.remove(file_path)
+            
+        
+        
+        
         window_application = WindowApp()
         os.system("pkill vfsd-gphoto2")
         sys.exit(window_application.app.exec_())
