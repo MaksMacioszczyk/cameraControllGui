@@ -88,8 +88,10 @@ class WindowApp:
             self.label_summ.setText("Test NOT OK")
         else:
             self.label_summ.setText("Test OK")
-        if not not_enough == 0:
-            self.label_info.setText("Brakuje "+str(-not_enough)+" diod")
+        if not_enough > 0:
+            self.label_info.setText("Brakuje "+str(not_enough)+" diod")
+        elif not_enough < 0:
+            self.label_info.setText("Znaleziono " + str(-not_enough) + "\n dodatkowych diod")
         else:
             self.label_info.setText("Poprawna ilość diod")
         data = brightestSpot.return_data()
