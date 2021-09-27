@@ -24,7 +24,7 @@ class WindowApp:
     ui_file.open(QFile.ReadOnly)
     loader = QUiLoader()
     window = loader.load(ui_file)
-    button = window.Button_1
+    check_compare = window.checkbox_1
     button_takePicture = window.Button_2
     button_test_n_compare = window.Button_3
     label = window.Label_1
@@ -60,7 +60,14 @@ class WindowApp:
                 text += "Dioda sprawna\n"
             else:
                 text += "!!Dioda NIEsprawna!!\n"
+                self.is_fatal = True
         self.label_data.setText(text)
+    def whichTest(self):
+        self.close_extra_windows()
+        if self.check_compare.isChecked():
+            self.button_test_n_compare_click()
+        else:
+            self.button_click()
 
     def button_click(self):
         try:
@@ -77,14 +84,17 @@ class WindowApp:
 #             print(NUMBER_SECONDS_TO_WAIT - (time.time() - start_time))
 #             self.label.setText(str(round(NUMBER_SECONDS_TO_WAIT - (time.time() - start_time))))
 #             self.app.processEvents()
-        self.button.setEnabled(True)
         sh_from_combo = self.combo_sh.currentText()
 
         image_src = cameraControll.capture_image(sh_from_combo, "200")#'/home/cezos/Pictures/Canon_700D/PIC_20-08-21--09:34:16.jpg'
-        image_marked, is_fatal, not_enough = brightestSpot.mark_brightest_spots(image_src, self.diode_label.text(),self.ACC)
+        image_marked, self.is_fatal, not_enough = brightestSpot.mark_brightest_spots(image_src, self.diode_label.text(),self.ACC)
         new_pixmap = QPixmap(image_marked)
         self.image_label.setPixmap(new_pixmap)
-        if is_fatal:
+        data = brightestSpot.return_data()
+        self.display_data(data)
+
+
+        if self.is_fatal:
             self.label_summ.setText("Test NOT OK")
         else:
             self.label_summ.setText("Test OK")
@@ -94,8 +104,7 @@ class WindowApp:
             self.label_info.setText("Znaleziono " + str(-not_enough) + "\n dodatkowych diod")
         else:
             self.label_info.setText("Poprawna ilość diod")
-        data = brightestSpot.return_data()
-        self.display_data(data)
+
 
     def button_takePicture_click(self):
         self.curr_template_image = cameraControll.capture_image("1/60", "200")
@@ -132,9 +141,8 @@ class WindowApp:
 
     def __init__(self):
 
-        self.button.clicked.connect(self.button_click)
         self.button_takePicture.clicked.connect(self.button_takePicture_click)
-        self.button_test_n_compare.clicked.connect(self.button_test_n_compare_click)
+        self.button_test_n_compare.clicked.connect(self.whichTest)
         self.window.setWindowFlags(Qt.Window )#| Qt.FramelessWindowHint)
         self.button_exit.clicked.connect(self.exit)
         self.button_close_images.clicked.connect(self.close_extra_windows)

@@ -168,7 +168,7 @@ def mark_brightest_spots(image_src, nod,acc):
             isFatal = True
            
 
-        elif luminace_from_data > (luminance_mean + (1-ACCURACY_MID) * luminance_mean) or luminace_from_data < (luminance_mean - (1 - ACCURACY_MID) * luminance_mean):
+        if luminace_from_data > (luminance_mean + (1-ACCURACY_MID) * luminance_mean) or luminace_from_data < (luminance_mean - (1 - ACCURACY_MID) * luminance_mean):
             print(f'illuminance VERY not OK, illuminance is {luminace_from_data}, mean is {luminance_mean}')
             cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
                                     cv2.CHAIN_APPROX_SIMPLE)
@@ -181,7 +181,7 @@ def mark_brightest_spots(image_src, nod,acc):
                                   (0,230,255), 3)
             isFatal = True
             
-        elif luminace_from_data > (luminance_mean + (1-ACCURACY_LOW) * luminance_mean) or luminace_from_data < (luminance_mean - (1 - ACCURACY_LOW) * luminance_mean):
+        if luminace_from_data > (luminance_mean + (1-ACCURACY_LOW) * luminance_mean) or luminace_from_data < (luminance_mean - (1 - ACCURACY_LOW) * luminance_mean):
             print(f'illuminance VERY not OK, illuminance is {luminace_from_data}, mean is {luminance_mean}')
             cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
             cnts = imutils.grab_contours(cnts)
@@ -207,7 +207,7 @@ def mark_brightest_spots(image_src, nod,acc):
                                       (255, 50, 0), 3)
                 isFatal = True
            
-            elif mask_pixels_from_data > (mask_pixels_mean + (1 - ACCURACY_MID) * mask_pixels_mean) or mask_pixels_from_data < (mask_pixels_mean - (1 - ACCURACY_MID) * mask_pixels_mean):
+            if mask_pixels_from_data > (mask_pixels_mean + (1 - ACCURACY_MID) * mask_pixels_mean) or mask_pixels_from_data < (mask_pixels_mean - (1 - ACCURACY_MID) * mask_pixels_mean):
                 print(f'radius of glow is  not OK, radius in pixel is {mask_pixels_from_data}, mean is {mask_pixels_mean}')
 
                 cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
@@ -222,7 +222,7 @@ def mark_brightest_spots(image_src, nod,acc):
                 isFatal = True
                 
 
-            elif mask_pixels_from_data > (mask_pixels_mean + (1-ACCURACY_LOW) * mask_pixels_mean) or mask_pixels_from_data < (mask_pixels_mean - (1 - ACCURACY_LOW) * mask_pixels_mean):
+            if mask_pixels_from_data > (mask_pixels_mean + (1-ACCURACY_LOW) * mask_pixels_mean) or mask_pixels_from_data < (mask_pixels_mean - (1 - ACCURACY_LOW) * mask_pixels_mean):
                 print(f'radius of glow is VERY not OK, radius in pixel is {mask_pixels_from_data}, mean is {mask_pixels_mean}')
 
                 cnts = cv2.findContours(mask_from_data.copy(), cv2.RETR_EXTERNAL,
